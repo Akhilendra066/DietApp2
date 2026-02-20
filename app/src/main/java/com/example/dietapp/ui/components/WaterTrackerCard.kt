@@ -33,6 +33,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ fun WaterTrackerCard(
     currentMl: Int,
     goalMl: Int,
     onAddGlass: () -> Unit,
+    onClick :() -> Unit={},
     modifier: Modifier = Modifier
 ) {
     val progress by animateFloatAsState(
@@ -53,7 +55,7 @@ fun WaterTrackerCard(
     )
 
     Card(
-        modifier = modifier.fillMaxWidth(),
+        onClick=onClick,modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface

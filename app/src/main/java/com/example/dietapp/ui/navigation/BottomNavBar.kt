@@ -31,7 +31,7 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem(Route.Home.route, "Home", Icons.Filled.Home, Icons.Outlined.Home),
     BottomNavItem(Route.WeeklyMealPlan.route, "Meals", Icons.Filled.MenuBook, Icons.Outlined.MenuBook),
-    BottomNavItem(Route.WeightLog.route, "Track", Icons.Filled.MonitorWeight, Icons.Outlined.MonitorWeight),
+    BottomNavItem(Route.TrackingHub.route, "Track", Icons.Filled.MonitorWeight, Icons.Outlined.MonitorWeight),
     BottomNavItem(Route.Profile.route, "Profile", Icons.Filled.Person, Icons.Outlined.Person)
 )
 

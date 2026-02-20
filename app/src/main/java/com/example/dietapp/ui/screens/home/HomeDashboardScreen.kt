@@ -1,5 +1,6 @@
 package com.example.dietapp.ui.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,6 +27,7 @@ fun HomeDashboardScreen(
     onNavigateToWaterTracker: () -> Unit = {},
     onNavigateToChat: () -> Unit = {},
     onNavigateToProgress: () -> Unit = {},
+    onNavigateToTracking: () -> Unit = {},
     viewModel: HomeDashboardViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -65,6 +67,7 @@ fun HomeDashboardScreen(
 
             // Macro donut
             Card(
+                modifier = Modifier.clickable { onNavigateToTracking() },
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 elevation = CardDefaults.cardElevation(2.dp)

@@ -29,8 +29,10 @@ import com.example.dietapp.ui.screens.profile.SettingsScreen
 import com.example.dietapp.ui.screens.profile.SubscriptionScreen
 import com.example.dietapp.ui.screens.splash.SplashScreen
 import com.example.dietapp.ui.screens.tracking.MealCompletionScreen
+import com.example.dietapp.ui.screens.tracking.NutrientDetailScreen
 import com.example.dietapp.ui.screens.tracking.ProgressReportScreen
 import com.example.dietapp.ui.screens.tracking.SymptomTrackerScreen
+import com.example.dietapp.ui.screens.tracking.TrackingHubScreen
 import com.example.dietapp.ui.screens.tracking.WaterTrackerScreen
 import com.example.dietapp.ui.screens.tracking.WeightLogScreen
 
@@ -55,6 +57,10 @@ sealed class Route(val route: String) {
     }
     data object GroceryList : Route("meals/grocery")
 
+    data object TrackingHub : Route("tracking/hub")
+    data object NutrientDetail : Route("tracking/nutrient/{nutrientName}") {
+        fun createRoute(nutrientName: String) = "tracking/nutrient/$nutrientName"
+    }
     data object WeightLog : Route("tracking/weight")
     data object WaterTracker : Route("tracking/water")
     data object MealCompletion : Route("tracking/meal_completion")
@@ -77,7 +83,7 @@ sealed class Route(val route: String) {
 val bottomNavRoutes = listOf(
     Route.Home.route,
     Route.WeeklyMealPlan.route,
-    Route.WeightLog.route,
+    Route.TrackingHub.route,
     Route.Profile.route
 )
 
@@ -172,7 +178,8 @@ fun AppNavGraph(
                 onNavigateToWeightLog = { navController.navigate(Route.WeightLog.route) },
                 onNavigateToWaterTracker = { navController.navigate(Route.WaterTracker.route) },
                 onNavigateToChat = { navController.navigate(Route.AIChat.route) },
-                onNavigateToProgress = { navController.navigate(Route.ProgressReport.route) }
+                onNavigateToProgress = { navController.navigate(Route.ProgressReport.route) },
+                onNavigateToTracking = { navController.navigate(Route.TrackingHub.route) }
             )
         }
 
@@ -208,6 +215,22 @@ fun AppNavGraph(
         }
 
         // ── Tracking ──────────────────────────────
+        composable(Route.TrackingHub.route) {
+            TrackingHubScreen(
+                onNavigateToNutrientDetail = { name ->
+                    navController.navigate(Route.NutrientDetail.createRoute(name))
+                }
+            )
+        }
+        composable(
+            route = Route.NutrientDetail.route,
+            arguments = listOf(navArgument("nutrientName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            NutrientDetailScreen(
+                nutrientName = backStackEntry.arguments?.getString("nutrientName") ?: "",
+                onBack = { navController.popBackStack() }
+            )
+        }
         composable(Route.WeightLog.route) {
             WeightLogScreen(onBack = { navController.popBackStack() })
         }
@@ -218,7 +241,12 @@ fun AppNavGraph(
             MealCompletionScreen(onBack = { navController.popBackStack() })
         }
         composable(Route.ProgressReport.route) {
-            ProgressReportScreen(onBack = { navController.popBackStack() })
+            ProgressReportScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToNutrientDetail = { name ->
+                    navController.navigate(Route.NutrientDetail.createRoute(name))
+                }
+            )
         }
         composable(Route.SymptomTracker.route) {
             SymptomTrackerScreen(onBack = { navController.popBackStack() })
